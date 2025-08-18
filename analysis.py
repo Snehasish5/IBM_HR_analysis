@@ -117,5 +117,4 @@ plt.title("Attrition by Years Since Last Promotion", fontsize=13, fontweight="bo
 plt.xlabel("Years Since Last Promotion", fontsize=11)
 plt.ylabel("Number of Employees", fontsize=11)
 plt.tight_layout()
-
 plt.show()
