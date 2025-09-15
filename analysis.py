@@ -3,25 +3,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-# =========================
 # 1. Load Data
-# =========================
+
 df = pd.read_csv(r"D:\Project\IBM_HR_ANALYSIS\WA_Fn-UseC_-HR-Employee-Attrition.csv")
 
 # Set theme
 sns.set_theme(style="whitegrid", palette="Set2")
 
-# =========================
 # 2. Basic Exploration
-# =========================
+
 print("Dataset Shape:", df.shape)
 print("\nMissing Values:\n", df.isnull().sum().sort_values(ascending=False).head(10))
 print("\nAttrition Distribution:\n", df["Attrition"].value_counts(normalize=True))
 print("\nSummary Statistics:\n", df.describe())
 
-# =========================
 # 3. Target Variable Distribution
-# =========================
+
 plt.figure(figsize=(7,5))
 ax = sns.countplot(data=df, x="Attrition", palette="Set2")
 plt.title("Attrition Distribution", fontsize=14, fontweight="bold")
@@ -29,6 +26,7 @@ plt.xlabel("Attrition", fontsize=12)
 plt.ylabel("Number of Employees", fontsize=12)
 
 # Show percentages on bars
+
 total = len(df)
 for p in ax.patches:
     percentage = f'{100 * p.get_height() / total:.1f}%'
@@ -39,9 +37,8 @@ for p in ax.patches:
 plt.tight_layout()
 plt.show()
 
-# =========================
 # 4. Numerical Distributions
-# =========================
+
 num_cols = ["Age", "MonthlyIncome", "YearsAtCompany", "TotalWorkingYears"]
 
 df[num_cols].hist(figsize=(12,8), bins=20, color="skyblue", edgecolor="black")
@@ -53,9 +50,8 @@ for ax in plt.gcf().axes:
 plt.tight_layout()
 plt.show()
 
-# =========================
 # 5. Boxplots: Numerical Features vs Attrition
-# =========================
+
 fig, axes = plt.subplots(2, 2, figsize=(13,7))
 for i, col in enumerate(num_cols):
     sns.boxplot(data=df, x="Attrition", y=col, ax=axes[i//2, i%2], palette="coolwarm")
@@ -65,9 +61,8 @@ for i, col in enumerate(num_cols):
 plt.tight_layout()
 plt.show()
 
-# =========================
 # 6. Categorical Analysis with Attrition
-# =========================
+
 cat_cols = ["Department", "JobRole", "MaritalStatus", "Gender", "OverTime", "BusinessTravel", "EducationField"]
 
 for col in cat_cols:
@@ -80,13 +75,13 @@ for col in cat_cols:
     plt.tight_layout()
     plt.show()
 
-# =========================
 # 7. Correlation Heatmap
-# =========================
+
 plt.figure(figsize=(12,8))
 corr = df.corr(numeric_only=True)
 
 # Plot mask for upper triangle
+
 mask = np.triu(corr)
 sns.heatmap(corr, cmap="coolwarm", center=0, mask=mask, annot=False, cbar=True)
 plt.title("Correlation Heatmap", fontsize=14, fontweight="bold")
@@ -94,15 +89,15 @@ plt.tight_layout()
 plt.show()
 
 # Show top correlated features with Attrition (if binary encoded)
+
 if "Attrition" in df.columns:
     # Convert Attrition to numeric (Yes=1, No=0)
     df["Attrition_n"] = df["Attrition"].map({"Yes":1, "No":0})
     corr_target = df.corr(numeric_only=True)["Attrition_n"].sort_values(ascending=False)
     print("\nTop Features Correlated with Attrition:\n", corr_target.head(10))
 
-# =========================
 # 8. Special Insights
-# =========================
+
 plt.figure(figsize=(10,6))
 sns.histplot(data=df, x="YearsAtCompany", hue="Attrition", multiple="stack", bins=20, palette="Set2")
 plt.title("Attrition by Years at Company", fontsize=13, fontweight="bold")
